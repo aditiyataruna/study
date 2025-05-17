@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Game Edukasi Adtar & Windi (Level 1-20)</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: #e3f2fd;
+    margin: 0; padding: 20px;
+    text-align: center;
+    color: #222;
+  }
+  .game-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  h1 {
+    color: #0d47a1;
+  }
+  .story {
+    font-style: italic;
+    margin: 15px 0;
+  }
+  .question {
+    font-weight: bold;
+    margin: 20px 0 10px;
+  }
+  .options {
+    list-style: none;
+    padding: 0;
+  }
+  .options li {
+    margin: 8px 0;
+  }
+  button.option-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #90caf9;
+    color: #0d47a1;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  button.option-btn:hover {
+    background-color: #42a5f5;
+    color: white;
+  }
+  .feedback {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  .summary {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+  }
+  .fun-text {
+    margin-top: 6px;
+    font-weight: bold;
+    color: #d81b60;
+  }
+  .lives {
+    margin-top: 15px;
+  }
+  .heart {
+    color: red;
+    font-size: 26px;
+    margin: 0 4px;
+  }
+  .character-img {
+    margin: 10px 0 20px;
+    height: 150px;
+  }
+  .next-btn {
+    margin-top: 25px;
+    padding: 10px 25px;
+    background-color: #1976d2;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+  }
+  .next-btn:hover {
+    background-color: #1565c0;
+  }
+</style>
+</head>
+<body>
+
+<div class="game-container">
+  <h1 id="level-title">Level 1</h1>
+  <img id="character-img" class="character-img" src="01.png" alt="Karakter" />
+  <div class="story" id="story-text">Cerita Level 1</div>
+  <div class="question" id="question-text">Pertanyaan Level 1</div>
+  <ul class="options" id="options-list"></ul>
+  <div class="feedback" id="feedback-text"></div>
+  <div class="lives" id="lives-container">Nyawa: <span id="hearts"></span></div>
+  <button class="next-btn" id="next-btn">Lanjut ke Level Berikutnya</button>
+</div>
+
+<script>
+  const levels = [
+    // Level 1
+    {
+      title: "Level 1: Mengenal Angka",
+      story: "Adtar ingin belajar angka pertama, Windi mengajarinya dengan penuh semangat.",
+      question: "Berapa hasil dari 90:3x7(3+2)?",
+      options: [
+        {text: "1055", correct: false, summary: "Salah, coba hitung lagi dengan hati yang sabar.", fun: "Jangan galau, yuk ulangi! 💪"},
+        {text: "1050", correct: true, summary: "wah hebat ya, mudah bukan?", fun: "Bener banget, hitungannya gampang kayak senyum Windi! 😊"},
+        {text: "1045", correct: false, summary: "Hampir, tapi kurang tepat nih.", fun: "Hati-hati, jangan sampai salah lagi ya! 😉"}
+      ],
+      characterImg: "assets/01.png"
+    },
+    // Level 2
+    {
+      title: "Level 2: Warna-Warni",
+      story: "Adtar ingin tahu warna apa yang paling cerah, Windi menjelaskan dunia warna.",
+      question: "Warna apa yang merupakan campuran merah dan biru?",
+      options: [
+        {text: "Ungu", correct: true, summary: "Merah + biru = ungu, keren kan?", fun: "Ungu itu seperti bunga cantik yang mekar di taman hati! 💜"},
+        {text: "Hijau", correct: false, summary: "Hijau adalah campuran biru dan kuning.", fun: "Hijau seperti rumput, segar dan sejuk! 🌿"},
+        {text: "Oranye", correct: false, summary: "Oranye berasal dari merah dan kuning.", fun: "Oranye itu seperti matahari pagi yang hangat! ☀️"}
+      ],
+      characterImg: "assets/flow.jpeg"
+    },
+    // Level 3
+    {
+      title: "Level 3: Bentuk Geometri",
+      story: "Windi mengajari Adtar tentang bentuk-bentuk dasar geometri.",
+      question: "Bentuk yang memiliki 4 sisi sama panjang dan 4 sudut sama besar disebut?",
+      options: [
+        {text: "Segitiga", correct: false, summary: "Segitiga punya 3 sisi.", fun: "Segitiga itu tajam, hati-hati ya! ⚠️"},
+        {text: "Persegi", correct: true, summary: "Betul, itu persegi.", fun: "Persegi itu rapi, kayak hati yang penuh cinta! ❤️"},
+        {text: "Lingkaran", correct: false, summary: "Lingkaran nggak punya sisi.", fun: "Lingkaran itu bulat sempurna, kayak pelukan Windi! 🤗"}
+      ],
+      characterImg: "assets/3.jpeg"
+    },
+    // Level 4
+    {
+      title: "Level 4: Hewan Peliharaan",
+      story: "Adtar bertanya tentang hewan peliharaan favorit, Windi menjawab dengan senyum.",
+      question: "Binatang apa yang bisa menggonggong?",
+      options: [
+        {text: "Kucing", correct: false, summary: "Kucing bisa mengeong, bukan menggonggong.", fun: "Kucing manis, suka bikin gemas! 😻"},
+        {text: "Anjing", correct: true, summary: "Anjing bisa menggonggong.", fun: "Anjing setia seperti Windi yang selalu ada! 🐶"},
+        {text: "Burung", correct: false, summary: "Burung bisa berkicau, bukan menggonggong.", fun: "Burung nyanyi merdu seperti cinta kita! 🎶"}
+      ],
+      characterImg: "assets/4.jpeg"
+    },
+    // Level 5
+    {
+      title: "Level 5: Matahari dan Bumi",
+      story: "Adtar ingin tahu kenapa siang dan malam ada, Windi mulai menjelaskan dengan sabar.",
+      question: "Apa yang menyebabkan terjadinya siang dan malam?",
+      options: [
+        {text: "Rotasi Bumi", correct: true, summary: "Rotasi Bumi membuat siang dan malam berganti.", fun: "Bumi muter terus, seperti hati yang terus merindu! 🌍"},
+        {text: "Revolusi Bumi", correct: false, summary: "Revolusi Bumi membuat musim berganti.", fun: "Musim datang silih berganti, seperti kisah cinta! 🍂"},
+        {text: "Gerak Matahari", correct: false, summary: "Matahari diam, Bumi yang bergerak.", fun: "Matahari setia di tempatnya, sinari dunia kita! ☀️"}
+      ],
+      characterImg: "assets/5.jpeg"
+    },
+    // Level 6
+    {
+      title: "Level 6: Air dan Wujudnya",
+      story: "Windi mengajarkan Adtar tentang wujud air yang berbeda-beda.",
+      question: "Air berubah menjadi es pada suhu berapa?",
+      options: [
+        {text: "100 derajat Celsius", correct: false, summary: "100°C adalah titik didih air.", fun: "Air mendidih panas, seperti cinta yang membara! 🔥"},
+        {text: "50 derajat Celsius", correct: false, summary: "50°C terlalu hangat untuk membeku.", fun: "Hangat seperti pelukan Windi! 🤗"},
+        {text: "0 derajat Celsius", correct: true, summary: "Air membeku pada 0°C.", fun: "Es dingin kayak hati yang merindu! ❄️"}
+      ],
+      characterImg: "assets/6.jpeg"
+    },
+    // Level 7
+    {
+      title: "Level 7: Planet Jupiter",
+      story: "Adtar penasaran dengan planet terbesar di tata surya, Windi pun mulai menjelaskan.",
+      question: "Planet terbesar di tata surya adalah?",
+      options: [
+        {text: "Mars", correct: false, summary: "Mars adalah planet merah, bukan yang terbesar.", fun: "Mars itu keren tapi nggak sebesar Jupiter! 🔴"},
+        {text: "Venus", correct: false, summary: "Venus terkenal sebagai planet panas.", fun: "Venus panas, kayak hati Adtar waktu kangen! 🔥"},
+        {text: "Jupiter", correct: true, summary: "Jupiter adalah planet terbesar.", fun: "Jupiter itu raksasa yang baik hati! 🌌"}
+      ],
+      characterImg: "assets/7.jpeg"
+    },
+    // Level 8
+    {
+      title: "Level 8: Tubuh Manusia",
+      story: "Adtar penasaran bagaimana tubuhnya bekerja, Windi mengajarkan organ-organ utama.",
+      question: "Organ yang memompa darah ke seluruh tubuh adalah?",
+      options: [
+        {text: "Paru-paru", correct: false, summary: "Paru-paru berfungsi untuk bernapas.", fun: "Paru-paru itu tempat udara masuk dan keluar, keren! 🌬️"},
+        {text: "Jantung", correct: true, summary: "Jantung memompa darah ke seluruh tubuh.", fun: "Jantung itu mesin cinta yang berdetak terus! 💓"},
+        {text: "Hati", correct: false, summary: "Hati memproses racun dan membantu metabolisme.", fun: "Hati itu seperti filter rasa, romantis banget! ❤️"}
+      ],
+      characterImg: "assets/8.jpeg"
+    },
+    // Level 9
+    {
+      title: "Level 9: Angin dan Cuaca",
+      story: "Langit berubah, Adtar belajar tentang angin, awan, dan cuaca bersama Windi.",
+      question: "Apa yang menyebabkan angin bertiup?",
+      options: [
+        {text: "Perbedaan tekanan udara", correct: true, summary: "Angin terjadi karena perbedaan tekanan udara.", fun: "Angin itu seperti hembusan napas bumi! 💨"},
+        {text: "Rotasi bumi", correct: false, summary: "Rotasi bumi menyebabkan siang dan malam.", fun: "Rotasi bumi bikin kita capek muter-muter! 🌍"},
+        {text: "Awan bergerak sendiri", correct: false, summary: "Awan mengikuti angin, bukan bergerak sendiri.", fun: "Kalau awan bisa jalan sendiri, seru tuh! ☁️"}
+      ],
+      characterImg: "assets/9.jpeg"
+    },
+    // Level 10
+    {
+      title: "Level 10: Magnet dan Gaya",
+      story: "Windi menunjukkan keajaiban magnet dan gaya yang membuat benda bergerak.",
+      question: "Kutub magnet yang saling tarik menarik adalah?",
+      options: [
+        {text: "Kutub berbeda (Utara dan Selatan)", correct: true, summary: "Kutub magnet berbeda akan tarik menarik.", fun: "Kutub magnet kayak jodoh, yang berbeda malah cocok! ❤️"},
+        {text: "Kutub sama (Utara dan Utara)", correct: false, summary: "Kutub sama akan tolak menolak.", fun: "Kalau sama, malah bikin jauh-jauh! 😆"},
+        {text: "Kutub Selatan saja", correct: false, summary: "Kutub tunggal nggak bisa tarik menarik sendiri.", fun: "Kalau kutub sendiri, kayak jomblo deh! 😜"},
+      ],
+      characterImg: "assets/10.jpeg"
+    },
+    // Level 11
+    {
+      title: "Level 11: Energi Matahari",
+      story: "Windi menjelaskan bagaimana matahari memberi energi ke bumi.",
+      question: "Energi matahari digunakan oleh tumbuhan untuk?",
+      options: [
+        {text: "Respirasi", correct: false, summary: "Respirasi adalah proses bernapas.", fun: "Hati-hati, jangan sampai salah paham! 😄"},
+        {text: "Transpirasi", correct: false, summary: "Transpirasi adalah penguapan air dari daun.", fun: "Tumbuhan juga butuh napas segar! 🍃"},
+        {text: "Fotosintesis", correct: true, summary: "Tumbuhan membuat makanan lewat fotosintesis.", fun: "Tumbuhan kayak chef yang super keren! 🌿"},
+      ],
+      characterImg: "assets/11.jpeg"
+    },
+    // Level 12
+    {
+      title: "Level 12: Gaya Gravitasi",
+      story: "Adtar bertanya kenapa benda jatuh ke tanah, Windi pun menjelaskan gaya gravitasi.",
+      question: "Siapa yang menemukan hukum gravitasi?",
+      options: [
+        {text: "Albert Einstein", correct: false, summary: "Einstein terkenal dengan teori relativitas.", fun: "Einstein juga jenius, tapi bukan gravitasi! 🧠"},
+        {text: "Galileo Galilei", correct: false, summary: "Galileo membantu sains tapi bukan hukum gravitasi.", fun: "Galileo lihat bintang, keren juga! ✨"},
+        {text: "Isaac Newton", correct: true, summary: "Newton menemukan hukum gravitasi.", fun: "Newton jatuh cinta sama apel, jadi penemu hebat! 🍎"}
+      ],
+      characterImg: "assets/12.jpeg"
+},
+// Level 13
+{
+title: "Level 13: Bahasa Indonesia",
+story: "Windi mengajari Adtar kata-kata indah dalam bahasa Indonesia.",
+question: "Sinonim kata 'Cantik' adalah?",
+options: [
+{text: "Jahat", correct: false, summary: "Jahat itu lawan kata cantik.", fun: "Jangan sampai salah ya, jangan jahat! 😄"},
+{text: "Indah", correct: true, summary: "Cantik dan indah mirip artinya.", fun: "Kamu cantik seperti senyum Windi! 😊"},
+{text: "Besar", correct: false, summary: "Besar bukan sinonim cantik.", fun: "Besar itu keren, tapi bukan cantik! 💪"}
+],
+characterImg: "assets/13.jpeg"
+},
+// Level 14
+{
+title: "Level 14: Pahlawan Nasional",
+story: "Adtar ingin tahu pahlawan yang berjuang demi bangsa, Windi bercerita.",
+question: "Siapa pahlawan nasional Indonesia yang terkenal dengan sumpahnya?",
+options: [
+{text: "Soekarno", correct: true, summary: "Soekarno terkenal dengan Sumpah Pemuda.", fun: "Soekarno semangat, kayak semangat cinta kita! ❤️"},
+{text: "Diponegoro", correct: false, summary: "Diponegoro pahlawan lain, hebat juga.", fun: "Pahlawan hebat, kayak kamu juga! 💪"},
+{text: "Kartini", correct: false, summary: "Kartini pejuang emansipasi wanita.", fun: "Kartini kuat, seperti Windi yang keren! 👩‍🎓"}
+],
+characterImg: "assets/14.jpeg"
+},
+// Level 15
+{
+title: "Level 15: Buah dan Vitamin",
+story: "Windi memberi tahu Adtar buah apa yang kaya vitamin C.",
+question: "Buah apa yang paling kaya vitamin C?",
+options: [
+{text: "Jeruk", correct: true, summary: "Jeruk kaya vitamin C.", fun: "Jeruk segar kayak senyum manismu! 🍊"},
+{text: "Pisang", correct: false, summary: "Pisang banyak kalium, bukan vitamin C.", fun: "Pisang manis dan sehat! 🍌"},
+{text: "Apel", correct: false, summary: "Apel bagus tapi bukan paling kaya vitamin C.", fun: "Apel juga enak, sehat selalu! 🍎"}
+],
+characterImg: "assets/15.jpeg"
+},
+// Level 16
+{
+title: "Level 16: Transportasi",
+story: "Adtar belajar tentang alat transportasi dari Windi.",
+question: "Alat transportasi yang berjalan di rel adalah?",
+options: [
+{text: "Mobil", correct: false, summary: "Mobil berjalan di jalan, bukan rel.", fun: "Mobil juga keren, tapi beda jalur! 🚗"},
+{text: "Kereta Api", correct: true, summary: "Kereta api berjalan di rel.", fun: "Kereta api cepat, kayak rasa cinta kita! 🚆"},
+{text: "Pesawat", correct: false, summary: "Pesawat terbang di udara.", fun: "Pesawat tinggi, kayak cita-citamu! ✈️"}
+],
+characterImg: "assets/16.jpeg"
+},
+// Level 17
+{
+title: "Level 17: Benda Langit",
+story: "Windi menjelaskan benda langit selain planet kepada Adtar.",
+question: "Apa nama bintang terbesar di tata surya kita?",
+options: [
+{text: "Matahari", correct: true, summary: "Matahari adalah bintang terbesar di tata surya.", fun: "Matahari hangat, kayak pelukan hangat Windi! ☀️"},
+{text: "Sirius", correct: false, summary: "Sirius bintang terang, tapi bukan terbesar.", fun: "Sirius keren juga, cahaya malam! 🌟"},
+{text: "Polaris", correct: false, summary: "Polaris bintang kutub.", fun: "Polaris penunjuk arah, kayak hatimu ke Windi! 💖"}
+],
+characterImg: "assets/17.jpeg"
+},
+// Level 18
+{
+title: "Level 18: Makanan Sehat",
+story: "Adtar belajar makanan sehat dari Windi agar kuat dan pintar.",
+question: "Makanan yang banyak mengandung protein adalah?",
+options: [
+{text: "Nasi", correct: false, summary: "Nasi sumber karbohidrat.", fun: "Nasi bikin kenyang, tapi bukan protein utama! 🍚"},
+{text: "Gula", correct: false, summary: "Gula sumber energi cepat, tapi kurang sehat.", fun: "Gula manis, tapi hati-hati ya! 🍬"},
+{text: "Telur", correct: true, summary: "Telur kaya protein.", fun: "Telur itu kecil tapi penuh tenaga! 🥚"}
+],
+characterImg: "assets/18.jpeg"
+},
+// Level 19
+{
+title: "Level 19: Tumbuhan dan Lingkungan",
+story: "Windi mengajak Adtar memahami pentingnya tumbuhan bagi lingkungan.",
+question: "Tumbuhan menghasilkan oksigen lewat proses?",
+options: [
+{text: "Respirasi", correct: false, summary: "Respirasi menghirup oksigen, bukan menghasilkan.", fun: "Respirasi itu penting, tapi beda fungsi! 🌬️"},
+{text: "Fermentasi", correct: false, summary: "Fermentasi proses pengolahan makanan.", fun: "Fermentasi unik, tapi bukan soal oksigen! 🧫"},
+{text: "Fotosintesis", correct: true, summary: "Fotosintesis menghasilkan oksigen.", fun: "Tumbuhan pemberi napas, seperti kamu buatku! 🍃"}
+],
+characterImg: "assets/19.jpeg"
+},
+// Level 20
+{
+title: "Level 20: Sains dan Teknologi",
+story: "Di level terakhir, Windi mengajak Adtar untuk bermimpi jadi ilmuwan hebat.",
+question: "Alat yang digunakan untuk melihat benda sangat kecil disebut?",
+options: [
+    {text: "Mikroskop", correct: true, summary: "Mikroskop untuk melihat benda kecil.", fun: "Mikroskop membuka dunia baru, kayak cinta kita! 🔬"},
+    {text: "Teleskop", correct: false, summary: "Teleskop untuk melihat benda jauh.", fun: "Teleskop ke bintang, aku ke kamu! 🌠"},
+    {text: "Periskop", correct: false, summary: "Periskop untuk melihat dari tempat tersembunyi.", fun: "Periskop keren, tapi beda fungsi! 🕵️‍♂️"}
+],
+characterImg: "assets/20.jpeg"
+},
+
+// Level 21
+  {
+    title: "Level 21: Planet Terbesar",
+    story: "🌟 Adtar baru saja masuk kelas Windi. Di papan tulis tertulis pertanyaan pertama. Windi tersenyum dan berkata, 'Ayo mulai petualangan ilmumu!'",
+    question: "Apa planet terbesar di tata surya?",
+    options: [
+      {text: "Mars", correct: false, summary: "Mars adalah planet kecil dan berbatu, bukan yang terbesar.", fun: "Seperti cintaku, Jupiter besar dan tak tergoyahkan. Tapi Mars, hanya planet kecil yang suka nyasar."},
+      {text: "Bumi", correct: false, summary: "Bumi adalah rumah kita, tapi bukan yang paling besar.", fun: "Bumi memang rumah kita, tapi Jupiter rumah cintaku untukmu yang luas tanpa batas~"},
+      {text: "Jupiter", correct: true, summary: "Benar! Jupiter adalah planet terbesar dalam tata surya.", fun: "Seperti Jupiter, rasa cintaku padamu paling besar di antara yang lain~ ❤️"},
+      {text: "Venus", correct: false, summary: "Venus adalah planet terpanas, bukan terbesar.", fun: "Venus panas, tapi senyummu lebih membakar hatiku 🔥"}
+    ],
+    characterImg: "assets/21.jpeg"
+  },
+
+  // Level 22
+  {
+    title: "Level 22: Rahasia Tumbuhan",
+    story: "📚 Windi membuka buku besar. Adtar membaca keras-keras dan menemukan pertanyaan kedua yang membuatnya penasaran!",
+    question: "Apa nama proses tumbuhan membuat makanan sendiri?",
+    options: [
+      {text: "Respirasi", correct: false, summary: "Respirasi adalah proses menghasilkan energi, bukan makanan.", fun: "Kalau kamu di sampingku, aku nggak butuh fotosintesis untuk hidup 💚"},
+      {text: "Fotosintesis", correct: true, summary: "Betul! Tumbuhan membuat makanannya sendiri melalui fotosintesis.", fun: "Kamu adalah matahari buat hatiku, sumber energiku setiap hari ☀️"},
+      {text: "Transpirasi", correct: false, summary: "Transpirasi adalah proses penguapan air dari daun.", fun: "Jangan cuma menguap doang dong cintanya… 😝"},
+      {text: "Kloroplasma", correct: false, summary: "Kloroplas adalah bagian dari sel tumbuhan tempat fotosintesis terjadi.", fun: "Kloroplas penting, tapi kamu lebih penting untukku 🌿"}
+    ],
+    characterImg: "assets/22.jpeg"
+  },
+
+  // Level 23
+  {
+    title: "Level 23: Letusan Gunung",
+    story: "🌋 Mereka tiba di gunung berapi miniatur. Asap mengepul dan pertanyaan muncul dari lahar!",
+    question: "Apa yang menyebabkan terjadinya gunung meletus?",
+    options: [
+      {text: "Gempa bumi", correct: false, summary: "Gempa bisa terjadi bersamaan, tapi bukan penyebab utama.", fun: "Cintaku nggak kayak gempa, nggak bikin kacau 😅"},
+      {text: "Magma naik ke permukaan", correct: true, summary: "Benar! Letusan terjadi saat magma naik dan menekan keluar.", fun: "Seperti magma yang meletup, rinduku padamu meledak-ledak ❤️‍🔥"},
+      {text: "Banjir", correct: false, summary: "Banjir tidak menyebabkan gunung meletus.", fun: "Banjir air mungkin bisa surut, tapi banjir cintaku? Enggak! 💘"},
+      {text: "Angin kencang", correct: false, summary: "Angin tidak memengaruhi gunung berapi.", fun: "Angin boleh kencang, tapi cintaku stabil buat kamu 💞"}
+    ],
+    characterImg: "assets/23.jpeg"
+  },
+
+  // Level 24
+  {
+    title: "Level 24: Inti Kehidupan",
+    story: "🔍 Di ruang sains, Windi menunjukkan mikroskop dan sebuah sel besar muncul!",
+    question: "Apa nama bagian sel yang mengatur semua aktivitas sel?",
+    options: [
+      {text: "Sitoplasma", correct: false, summary: "Sitoplasma adalah cairan dalam sel, bukan pusat kontrol.", fun: "Sitoplasma itu penting, tapi kamu pusatnya di hatiku 😍"},
+      {text: "Nukleus", correct: true, summary: "Benar! Nukleus adalah inti sel yang mengontrol aktivitasnya.", fun: "Kamu tuh nukleus-nya hatiku… yang atur semuanya 💘"},
+      {text: "Membran sel", correct: false, summary: "Membran hanya membungkus sel, bukan mengatur.", fun: "Kamu pelindung hatiku, tapi bukan yang ngatur kayak nukleus 🥰"},
+      {text: "Mitokondria", correct: false, summary: "Mitokondria menghasilkan energi, bukan pengatur.", fun: "Kalau kamu mitokondria, berarti kamu sumber semangatku 🔋❤️"}
+    ],
+    characterImg: "assets/24.jpeg"
+  },
+
+  // Level 25
+  {
+    title: "Level 25: Warna Hujan",
+    story: "🌧️ Di halaman sekolah, hujan turun perlahan. Windi menunjuk ke pelangi yang muncul di langit!",
+    question: "Apa penyebab terjadinya pelangi?",
+    options: [
+      {text: "Hujan dan salju", correct: false, summary: "Salju tidak menyebabkan pelangi.", fun: "Kalau salju bikin dingin, kamu bikin hatiku hangat 🌈"},
+      {text: "Sinar matahari dan kabut", correct: false, summary: "Kabut bisa bias cahaya tapi bukan utama pelangi.", fun: "Kabut boleh datang, tapi cintaku tetap terang seperti pelangi~"},
+      {text: "Sinar matahari dan tetesan air hujan", correct: true, summary: "Tepat! Pelangi muncul karena pembiasan cahaya matahari oleh tetesan hujan.", fun: "Pelangi hadir setelah hujan… kayak senyummu setelah aku buat tertawa 💖"},
+      {text: "Awan dan angin", correct: false, summary: "Awan dan angin tidak membentuk pelangi.", fun: "Awan boleh kelabu, tapi cinta ini tetap berwarna 🌦️💗"}
+    ],
+    characterImg: "assets/25.jpeg"
+  },
+  // Level 26
+  {
+    title: "Level 26: Greetings in English",
+    story: "🇬🇧 Windi membuka buku Bahasa Inggris. 'Let’s learn how to greet!' katanya kepada Adtar dengan senyum hangat.",
+    question: "Apa arti dari 'Good morning'?",
+    options: [
+      {text: "Selamat malam", correct: false, summary: "Good morning berarti selamat pagi.", fun: "Malam bukan waktunya belajar cinta, pagi lah waktunya berharap padamu ☀️"},
+      {text: "Selamat pagi", correct: true, summary: "Tepat! Good morning adalah sapaan di pagi hari.", fun: "Good morning, sunshine! Senyummu bikin pagi makin semangat 💛"},
+      {text: "Selamat tidur", correct: false, summary: "Itu 'Good night', bukan 'Good morning'.", fun: "Kalau good night berarti aku mau mimpi indah bareng kamu 😴"},
+      {text: "Sampai jumpa", correct: false, summary: "Itu lebih cocok 'See you'.", fun: "Kalau sampai jumpa... aku harap cepet ketemu lagi sama kamu 😘"}
+    ],
+    characterImg: "assets/26.jpeg"
+  },
+
+  // Level 27
+  {
+    title: "Level 27: Vocabulary – Animals",
+    story: "🐶 Windi menunjuk gambar binatang. 'Ayo tebak dalam Bahasa Inggris ya!'",
+    question: "Apa Bahasa Inggris dari 'kucing'?",
+    options: [
+      {text: "Dog", correct: false, summary: "Dog artinya anjing.", fun: "Kalau kamu salah terus, aku bisa menggonggong loh 😜"},
+      {text: "Cat", correct: true, summary: "Cat adalah kata Bahasa Inggris untuk kucing.", fun: "Aku suka kucing, apalagi kalau kamu nyengir kayak kucing 😽"},
+      {text: "Bird", correct: false, summary: "Bird adalah burung.", fun: "Burung boleh terbang, tapi hatiku tetap mendarat di kamu 💘"},
+      {text: "Cow", correct: false, summary: "Cow artinya sapi.", fun: "Kalau kamu sapi, aku siap bertani cinta deh 🐮❤️"}
+    ],
+    characterImg: "assets/27.jpeg"
+  },
+
+  // Level 28
+  {
+    title: "Level 28: Sentence Structure",
+    story: "📘 Windi mengajarkan cara menyusun kalimat dalam Bahasa Inggris. 'Perhatikan urutannya ya!', katanya.",
+    question: "Mana susunan kalimat yang benar dalam Bahasa Inggris?",
+    options: [
+      {text: "She playing is football", correct: false, summary: "Susunan salah, verb dan subject harus tertata.", fun: "Kalau kamu main bola, aku jadi wasitnya deh ⚽"},
+      {text: "Is football playing she", correct: false, summary: "Bentuk pertanyaan tapi tetap salah urutan.", fun: "Aku bingung bacanya, kayak aku bingung ngerti perasaanmu 😵"},
+      {text: "She is playing football", correct: true, summary: "Tepat! Subjek + to be + verb-ing.", fun: "Kalimat ini jelas, seperti perasaanku padamu 💌"},
+      {text: "Football she is playing", correct: false, summary: "Kata benda di depan membuatnya rancu.", fun: "Kalimatnya acak, kayak hatiku pas kamu senyum 😍"}
+    ],
+    characterImg: "assets/28.jpeg"
+  },
+
+  // Level 29
+  {
+    title: "Level 29: Telling Time",
+    story: "🕐 Windi memperlihatkan jam dinding. 'Yuk, belajar menyebut waktu dalam Bahasa Inggris!', katanya.",
+    question: "How do you say 07.30 in English?",
+    options: [
+      {text: "Half past seven", correct: true, summary: "Benar! Half past seven artinya jam tujuh lewat tiga puluh.", fun: "Setengah jam bersamamu lebih indah dari sehari tanpamu ⏰❤️"},
+      {text: "Seven thirty past", correct: false, summary: "Formatnya tidak baku.", fun: "Waktu boleh salah, tapi waktuku sama kamu harus pas 🥹"},
+      {text: "Seven past thirty", correct: false, summary: "Tidak sesuai grammar Inggris.", fun: "Jangan bikin grammar galau kayak hati aku 🙃"},
+      {text: "Thirty seven", correct: false, summary: "Itu malah jadi angka, bukan waktu.", fun: "Tiga puluh tujuh? Kamu maunya ngajak aku jalan jam berapa dong? 😅"}
+    ],
+    characterImg: "assets/29.jpeg"
+  },
+
+  // Level 30
+  {
+    title: "Level 30: Simple Present",
+    story: "✍️ Windi menjelaskan tentang penggunaan kata kerja bentuk pertama. 'Ini penting banget untuk sehari-hari loh!'",
+    question: "Kalimat mana yang benar menggunakan simple present tense?",
+    options: [
+      {text: "He go to school every day", correct: false, summary: "Harusnya 'goes' karena subjeknya 'he'.", fun: "Kamu lupa 's'-nya, kayak aku yang selalu ingat 's'ayang kamu 😁"},
+      {text: "They going to school", correct: false, summary: "Itu bentuk present continuous, bukan simple present.", fun: "Going kemana sih? Ke hatiku? 😍"},
+      {text: "I am go to school", correct: false, summary: "Salah kombinasi to be dan verb.", fun: "Am go? Kamu bikin grammar-ku jungkir balik deh 🌀"},
+      {text: "He goes to school every day", correct: true, summary: "Tepat! Subjek tunggal pakai akhiran -s pada kata kerja.", fun: "Kalau kamu pergi sekolah, aku ikut jadi semangat pagimu 🎒❤️"}
+    ],
+    characterImg: "assets/30.jpeg"
+  },
+
+  // Level 31
+  {
+    title: "Level 31: Pahlawan Kemerdekaan",
+    story: "🇮🇩 Windi membawa Adtar ke museum sejarah. Di sana, mereka bertemu dengan patung pahlawan nasional pertama!",
+    question: "Siapa pahlawan yang dikenal sebagai Proklamator kemerdekaan Indonesia?",
+    options: [
+      {text: "Sukarno", correct: true, summary: "Benar! Sukarno adalah proklamator dan presiden pertama Indonesia.", fun: "Kata Bung Karno, beri aku 10 pemuda, akan kuguncang dunia. Tapi cukup kamu satu saja, hatiku udah goyang! ❤️"},
+      {text: "Cut Nyak Dien", correct: false, summary: "Cut Nyak Dien adalah pahlawan wanita dari Aceh.", fun: "Cut Nyak Dien berani, seperti aku yang berani nembak kamu 😎"},
+      {text: "Pattimura", correct: false, summary: "Pattimura dikenal sebagai pejuang dari Maluku.", fun: "Pattimura kuat, tapi hatiku lemah kalau liat kamu senyum 😊"},
+      {text: "Ki Hajar Dewantara", correct: false, summary: "Ki Hajar Dewantara adalah pahlawan pendidikan.", fun: "Dia guru bangsa, kamu guru hatiku 🥰"}
+    ],
+    characterImg: "assets/31.jpeg"
+  },
+
+  // Level 32
+  {
+    title: "Level 32: Pahlawan Perempuan",
+    story: "🎖️ Di ruangan lain, Adtar melihat lukisan wanita tangguh. Windi berkata, 'Dia pahlawan wanita yang sangat berani.'",
+    question: "Siapa nama pahlawan wanita dari Aceh yang melawan penjajah?",
+    options: [
+      {text: "R.A. Kartini", correct: false, summary: "Kartini memperjuangkan hak wanita, bukan dari Aceh.", fun: "Kartini memperjuangkan emansipasi, seperti aku yang berjuang dapetin cintamu 💘"},
+      {text: "Martha Christina Tiahahu", correct: false, summary: "Martha adalah pahlawan dari Maluku.", fun: "Martha berani, tapi aku berani lebih buat kamu~"},
+      {text: "Cut Nyak Dien", correct: true, summary: "Benar! Cut Nyak Dien adalah pahlawan dari Aceh.", fun: "Setangguh Cut Nyak Dien, cintaku nggak pernah menyerah padamu 💪❤️"},
+      {text: "Dewi Sartika", correct: false, summary: "Dewi Sartika adalah tokoh pendidikan wanita.", fun: "Dia pahlawan pendidikan, kamu pahlawan hatiku 📚❤️"}
+    ],
+    characterImg: "assets/32.jpeg"
+  },
+
+  // Level 33
+  {
+    title: "Level 33: Pendidikan untuk Semua",
+    story: "🏫 Adtar melihat kutipan terkenal di dinding sekolah. Windi tersenyum, 'Kamu tahu siapa yang bilang ini?'",
+    question: "Siapa tokoh yang dikenal sebagai Bapak Pendidikan Nasional?",
+    options: [
+      {text: "Ki Hajar Dewantara", correct: true, summary: "Tepat! Beliau adalah pelopor pendidikan untuk rakyat Indonesia.", fun: "Tut wuri handayani, tapi kalau kamu, selalu di depan hatiku 💞"},
+      {text: "Sudirman", correct: false, summary: "Sudirman adalah pahlawan militer.", fun: "Jendral hebat, tapi kamu panglima hatiku 🫡"},
+      {text: "Sukarno", correct: false, summary: "Sukarno adalah proklamator kemerdekaan.", fun: "Dia presiden, kamu presiden cinta di hati ini 😘"},
+      {text: "Mohammad Hatta", correct: false, summary: "Hatta adalah proklamator dan wakil presiden.", fun: "Kalau Hatta wakil presiden, kamu wakil rinduku 🤗"}
+    ],
+    characterImg: "assets/33.jpeg"
+  },
+
+  // Level 34
+  {
+    title: "Level 34: Pejuang dari Maluku",
+    story: "⚔️ Mereka berjalan menuju pojok museum dengan senjata tradisional dan baju perang khas timur Indonesia.",
+    question: "Siapakah pahlawan nasional dari Maluku yang terkenal dengan semangat juangnya?",
+    options: [
+      {text: "Pattimura", correct: true, summary: "Betul! Thomas Matulessy atau Pattimura adalah pahlawan dari Maluku.", fun: "Pattimura berani melawan penjajah, aku berani melawan rindu buat kamu 😍"},
+      {text: "Sudirman", correct: false, summary: "Sudirman dikenal sebagai panglima besar.", fun: "Panglima bisa memimpin pasukan, tapi nggak bisa pimpin hatiku seperti kamu~"},
+      {text: "Teuku Umar", correct: false, summary: "Teuku Umar adalah pahlawan dari Aceh.", fun: "Teuku Umar pejuang hebat, tapi kamu juaranya hatiku 🥇"},
+      {text: "Tuanku Imam Bonjol", correct: false, summary: "Imam Bonjol pahlawan dari Sumatera Barat.", fun: "Dari Sumbar sampai hatiku, semua jalan menuju kamu~ 💓"}
+    ],
+    characterImg: "assets/34.jpeg"
+  },
+
+  // Level 35
+  {
+    title: "Level 35: Wanita Hebat",
+    story: "👩‍🏫 Di ruang terakhir, terdapat biografi pahlawan wanita yang memperjuangkan pendidikan.",
+    question: "Siapakah tokoh wanita yang dikenal karena jasanya dalam bidang pendidikan?",
+    options: [
+      {text: "R.A. Kartini", correct: false, summary: "Kartini memperjuangkan hak wanita, bukan pendidikan langsung.", fun: "R.A. Kartini membuka jalan, tapi kamu yang isi hatiku ✨"},
+      {text: "Cut Nyak Meutia", correct: false, summary: "Beliau adalah pejuang kemerdekaan dari Aceh.", fun: "Berani seperti Meutia, tapi lembut seperti kamu 💖"},
+      {text: "Dewi Sartika", correct: true, summary: "Benar! Dewi Sartika memperjuangkan pendidikan untuk wanita.", fun: "Pendidikan itu penting, tapi kamu lebih penting buat hidupku 📚❤️"},
+      {text: "Martha Christina Tiahahu", correct: false, summary: "Pejuang wanita dari Maluku.", fun: "Dari Maluku, tapi rasa cinta ini nggak bisa diredam 🔥"}
+    ],
+    characterImg: "assets/35.jpeg"
+  },
+  // Level 36: Kisah Nabi Nuh
+  {
+    title: "Level 36: Bahtera Nabi Nuh",
+    story: "🌧️ Saat hujan deras turun, Windi berkata, 'Ini seperti kisah Nabi Nuh, ya Adtar?'",
+    question: "Apa pelajaran utama dari kisah Nabi Nuh a.s.?",
+    options: [
+      {text: "Membangun kapal itu mudah", correct: false, summary: "Kapal besar bukan tujuan utama kisah ini.", fun: "Bangun kapal bisa lama, bangun cinta kita pelan tapi pasti ⛵❤️"},
+      {text: "Taat perintah Allah", correct: true, summary: "Benar! Nabi Nuh menunjukkan ketaatan kepada Allah meskipun banyak yang mengejeknya.", fun: "Seperti Nabi Nuh taat, aku juga taat… pada cintamu 😌"},
+      {text: "Agar tidak kena hujan", correct: false, summary: "Itu hanya bagian dari kisah, bukan intinya.", fun: "Hujan boleh deras, tapi rinduku lebih deras ke kamu "},
+      {text: "Karena banjir itu menyenangkan", correct: false, summary: "Banjir saat itu adalah azab, bukan mainan.", fun: "Banjir azab, tapi kamu hadir hatiku jadi hidup 😍"}
+    ],
+    characterImg: "assets/36.jpeg"
+  },
+
+  // Level 37: Kisah Nabi Ibrahim
+  {
+    title: "Level 37: Pengorbanan Nabi Ibrahim",
+    story: "🐏 Windi menunjukkan patung domba dan berkata, 'Adtar, kamu tahu kisah pengorbanan ini?'",
+    question: "Apa yang ingin diajarkan dari kisah Nabi Ibrahim yang bersedia menyembelih anaknya?",
+    options: [
+      {text: "Karena tidak sayang anak", correct: false, summary: "Nabi Ibrahim sangat menyayangi anaknya, ini ujian iman.", fun: "Sayang anak itu penting, tapi sayang kamu paling utama 😘"},
+      {text: "Bukti cinta kepada Allah", correct: true, summary: "Benar! Nabi Ibrahim menunjukkan cinta dan taat penuh pada Allah.", fun: "Cinta sejati itu pengorbanan, seperti aku rela menunggu kamu 💖"},
+      {text: "Untuk mendapat hadiah", correct: false, summary: "Motivasinya bukan hadiah, tapi ketaatan.", fun: "Hadiah bisa dicari, tapi senyum kamu nggak terganti 🎁"},
+      {text: "Sebagai tradisi zaman dulu", correct: false, summary: "Ini bukan soal tradisi, tapi keimanan.", fun: "Tradisi boleh berubah, cintaku tetap sama 😇"}
+    ],
+    characterImg: "assets/37.jpeg"
+  },
+
+  // Level 38: Kisah Nabi Musa
+  {
+    title: "Level 38: Nabi Musa dan Laut Merah",
+    story: "🌊 Windi memutar film animasi Nabi Musa membelah laut. Adtar takjub!",
+    question: "Apa yang terjadi ketika Nabi Musa dikejar oleh Fir'aun?",
+    options: [
+      {text: "Dia ditangkap dan dipenjara", correct: false, summary: "Justru Nabi Musa diselamatkan Allah.", fun: "Dipenjara mungkin iya, tapi cintaku bebas buat kamu 😍"},
+      {text: "Laut terbelah dan ia selamat", correct: true, summary: "Benar! Allah membelah laut untuk menyelamatkan Nabi Musa dan kaumnya.", fun: "Laut bisa terbelah, hatiku bisa kebuka cuma buat kamu 🌊❤️"},
+      {text: "Ia naik perahu besar", correct: false, summary: "Perahu bukan bagian dari kisah ini.", fun: "Perahu cinta kita belum jalan, ayo berlayar yuk~⛵"},
+      {text: "Ia sembunyi di gunung", correct: false, summary: "Ia tidak bersembunyi di gunung, tapi maju dengan iman.", fun: "Gunung tinggi bisa didaki, cintamu juga kuperjuangkan~ 🏔️"}
+    ],
+    characterImg: "assets/38.jpeg"
+  },
+
+  // Level 39: Kisah Nabi Yunus
+  {
+    title: "Level 39: Nabi Yunus dalam Perut Ikan",
+    story: "🐋 Di akuarium besar, Windi berkata, 'Ini mengingatkanku pada kisah Nabi Yunus.'",
+    question: "Apa yang dilakukan Nabi Yunus saat dalam perut ikan?",
+    options: [
+      {text: "Tidur sampai pagi", correct: false, summary: "Ia tidak tidur, justru banyak berdoa.", fun: "Tidur bisa nyenyak, tapi rinduku ke kamu selalu bangun 😴❤️"},
+      {text: "Berdoa dan bertaubat", correct: true, summary: "Benar! Nabi Yunus berdoa dengan penuh penyesalan kepada Allah.", fun: "Seperti Yunus yang memohon ampun, aku mohon cintamu jangan pergi 🙏"},
+      {text: "Makan ikan juga", correct: false, summary: "Lucu, tapi justru ia berada di dalam perut ikan.", fun: "Bukan makan ikan, tapi aku makan hati karena kamu manis 🐠"},
+      {text: "Menulis puisi", correct: false, summary: "Dalam keadaan gelap, ia hanya berdoa.", fun: "Kalau aku di sana, pasti kutulis puisi buat kamu 💌"}
+    ],
+    characterImg: "assets/39.jpeg"
+  },
+
+  // Level 40: Akhlak Nabi Muhammad
+  {
+    title: "Level 40: Akhlak Mulia Nabi Muhammad",
+    story: "🌹 Windi menunjuk papan bertuliskan 'Uswatun Hasanah'. 'Ini gelar untuk siapa, Adtar?'",
+    question: "Apa sifat utama Nabi Muhammad yang patut kita teladani?",
+    options: [
+      {text: "Pemarah", correct: false, summary: "Nabi Muhammad selalu bersikap lembut dan sabar.", fun: "Pemarah bikin jauh, sabar bikin deket kayak kamu 😇"},
+      {text: "Pelit", correct: false, summary: "Beliau sangat dermawan dan suka memberi.", fun: "Pelit nggak cocok buat cinta, cinta harus royal 😎"},
+      {text: "Jujur dan amanah", correct: true, summary: "Benar! Beliau dikenal dengan gelar Al-Amin karena kejujurannya.", fun: "Kalau jujur itu indah, kamu adalah keindahan yang jujur buatku 💖"},
+      {text: "Suka membalas dendam", correct: false, summary: "Nabi Muhammad selalu memaafkan dan sabar.", fun: "Balas dendam nggak perlu, yang penting balas chat kamu 😁"}
+    ],
+    characterImg: "assets/40.jpeg"
+  },
+  // Level 41: Tebak Gambar 1
+  {
+    title: "Level 41: Tebak Gambar Awan",
+    story: "🌥️ Windi menunjukkan gambar awan putih besar di langit. 'Ayo Adtar, tebak jenis awan ini!'",
+    question: "Apa nama jenis awan pada gambar ini? (bayangkan gambar awan kumulus)",
+    options: [
+      {text: "Stratus", correct: false, summary: "Stratus adalah awan tipis dan menyebar.", fun: "Seperti rasa cinta yang tipis kalau nggak dibales chat 😢"},
+      {text: "Cirrus", correct: false, summary: "Cirrus adalah awan tinggi dan halus.", fun: "Cirrus tinggi di langit, seperti ekspektasi kalau kamu ngambek 😅"},
+      {text: "Kumulus", correct: true, summary: "Kumulus adalah awan besar seperti kapas.", fun: "Seperti awan ini, cintaku empuk dan nyaman buat kamu ☁️❤️"},
+      {text: "Nimbus", correct: false, summary: "Nimbus adalah awan hujan.", fun: "Kalau nimbus datang, jangan sedih ya, aku payung hatimu ☔❤️"}
+    ],
+    characterImg: "assets/41.jpeg"
+  },
+
+  // Level 42: Tebak Gambar Bendera
+  {
+    title: "Level 42: Tebak Negara",
+    story: "🇳🇱 Windi menunjukkan gambar bendera dengan julukan . 'Tahu negara mana ini?'",
+    question: "Bendera dengan julukan negeri kincir angin adalah milik negara?",
+    options: [
+      {text: "China", correct: false, summary: "China punya bintang kuning, bukan Negara Tulip.", fun: "Bintangmu bersinar, tapi bukan dari China ⭐"},
+      {text: "Belanda", correct: true, summary: "Negeri Kincir Angin Belanda!", fun: "Seperti Belanda, kamu seperti bunga tulip yang bermekaran di negara tercanti yaitu Belanda 🌞🤍"},
+      {text: "Korea", correct: false, summary: "Korea punya simbol Yin-Yang, bukan lingkaran polos.", fun: "Korea punya drama, kita punya cerita 😍"},
+      {text: "Thailand", correct: false, summary: "Bendera Thailand terdiri dari garis merah, putih, dan biru.", fun: "Warna bisa beda, tapi cintaku selalu satu buat kamu 🎨❤️"}
+    ],
+    characterImg: "assets/42.jpeg"
+  },
+
+  // Level 43: Tebak Gambar Alat Musik
+  {
+    title: "Level 43: Tebak Alat Musik",
+    story: "🎻 Windi memperlihatkan gambar alat musik petik. 'Yuk tebak, ini alat musik apa?'",
+    question: "Alat musik dalam gambar ini disebut? (gambar gitar)",
+    options: [
+      {text: "Gitar", correct: true, summary: "Benar! Gitar adalah alat musik petik paling populer.", fun: "Petikan gitarku hanya untuk nyanyi lagu cinta buat kamu 🎶❤️"},
+      {text: "Biola", correct: false, summary: "Biola dimainkan dengan digesek, bukan dipetik.", fun: "Biola romantis, tapi kamu lebih dari simfoni cinta 🎻"},
+      {text: "Sasando", correct: false, summary: "Sasando dari NTT, bentuknya berbeda.", fun: "Sasando unik, seperti caramu bikin aku senyum 😁"},
+      {text: "Ukulele", correct: false, summary: "Ukulele lebih kecil dari gitar.", fun: "Ukulele kecil, cintaku gede 🫶"}
+    ],
+    characterImg: "assets/43.jpeg"
+  },
+
+  // Level 44: Tebak Gambar Makanan
+  {
+    title: "Level 44: Tebak Makanan Tradisional",
+    story: "🍙 Windi mengeluarkan gambar makanan berbungkus daun. 'Ini makanan khas Indonesia, ayo tebak!'",
+    question: "Makanan dalam gambar ini adalah? (gambar lemper)",
+    options: [
+      {text: "Lemper", correct: true, summary: "Betul! Lemper dibungkus daun dan isi ayam.", fun: "Seperti lemper, cintaku lengket dan penuh rasa 🥰"},
+      {text: "Lontong", correct: false, summary: "Lontong tidak berisi ayam.", fun: "Lontong bulat, tapi hatiku cuma buat kamu yang lurus 😘"},
+      {text: "Arep", correct: false, summary: "Mungkin maksudnya arem-arem? Tapi itu beda.", fun: "Arem-arem itu isi sayur, hatiku isi kamu 💘"},
+      {text: "Tape", correct: false, summary: "Tape terbuat dari singkong fermentasi.", fun: "Tape manis, tapi kamu lebih manis 💋"}
+    ],
+    characterImg: "assets/44.jpeg"
+  },
+
+  // Level 45: Tebak Gambar Hewan
+  {
+    title: "Level 45: Tebak Hewan Cerdas",
+    story: "🐘 Windi menunjukkan gambar hewan besar dengan belalai. 'Apa nama hewan ini, Adtar?'",
+    question: "Hewan ini dikenal karena kecerdasan dan ukuran besar, namanya?",
+    options: [
+      {text: "Gajah", correct: true, summary: "Benar! Gajah adalah hewan darat terbesar dan sangat cerdas.", fun: "Gajah besar, tapi cintaku lebih gede buat kamu ❤️"},
+      {text: "Badak", correct: false, summary: "Badak besar juga, tapi bukan yang dimaksud.", fun: "Badak kuat, tapi aku lemah kalau lihat kamu 😳"},
+      {text: "Singa", correct: false, summary: "Singa adalah raja hutan, bukan hewan ini.", fun: "Singa raja hutan, kamu ratu hatiku 👑"},
+      {text: "Beruang", correct: false, summary: "Beruang besar, tapi bukan ini.", fun: "Beruang lucu, tapi kamu lebih bikin gemas 🧸"}
+    ],
+    characterImg: "assets/45.jpeg"
+  },
+  // Level 46: Tes Kepribadian - Warna Favorit
+  {
+    title: "Level 46: Pilih Warna Favorit",
+    story: " Windi ingin tahu kepribadian Adtar dari warna favoritnya.",
+    question: "Warna apa yang paling kamu sukai?",
+    options: [
+      {text: "Merah", correct: true, summary: "Kamu berani dan penuh semangat!", fun: "Merah seperti cintaku yang membara buat kamu ❤️🔥"},
+      {text: "Biru", correct: true, summary: "Kamu tenang dan bijaksana.", fun: "Biru seperti langit cinta kita yang luas 💙"},
+      {text: "Kuning", correct: true, summary: "Kamu ceria dan penuh harapan.", fun: "Kuning cerah, kayak senyum kamu tiap pagi 🌞"},
+      {text: "Hijau", correct: true, summary: "Kamu penyayang dan alami.", fun: "Hijau sejuk, kayak pelukan kamu 🌿"},
+      {text: "Putih", correct: true, summary: "Kamu memiliki cinta yang tulus dan murni.", fun: "Putih itu tulus kayak cintaku yang nggak kenal batas 🤍"}
+    ],
+    characterImg: "assets/46.jpeg"
+  },
+
+  // Level 47: Pilih Tempat Impian
+  {
+    title: "Level 47: Tempat Favoritmu",
+    story: "🗺️ Windi bertanya: 'Kalau bisa liburan ke mana aja, kamu pilih ke mana?'",
+    question: "Pilih tempat impianmu:",
+    options: [
+      {text: "Pantai", correct: true, summary: "Kamu suka ketenangan dan kehangatan.", fun: "Pantai tenang, kayak cinta kita yang damai 🏖️❤️"},
+      {text: "Gunung", correct: true, summary: "Kamu suka tantangan dan keindahan.", fun: "Gunung tinggi, tapi cintaku lebih tinggi! 🏔️"},
+      {text: "Kota besar", correct: true, summary: "Kamu aktif dan penuh semangat.", fun: "Hiruk pikuk kota, kayak degup jantungku pas dekat kamu 💓"},
+      {text: "Desa", correct: true, summary: "Kamu sederhana dan damai.", fun: "Desa tenang, seperti pelukan kamu yang menenangkan 🏡"}
+    ],
+    characterImg: "assets/47.jpeg"
+  },
+
+  // Level 48: Pilih Bentuk Hati
+  {
+    title: "Level 48: Bentuk Hati Favorit",
+    story: "💖 Windi menunjukkan beberapa bentuk hati. 'Yang mana favoritmu?'",
+    question: "Pilih bentuk hati yang kamu suka:",
+    options: [
+      {text: "❤️", correct: true, summary: "Kamu romantis dan penuh cinta.", fun: "Sama kayak aku dong, pencinta setia kamu 😍"},
+      {text: "💛", correct: true, summary: "Kamu ceria dan setia kawan.", fun: "Hati kuning, kayak cahaya kamu di hidupku 💫"},
+      {text: "💚", correct: true, summary: "Kamu penyayang dan peduli.", fun: "Hijau artinya kamu cinta damai… dan aku! 🌿"},
+      {text: "💙", correct: true, summary: "Kamu tenang dan dewasa.", fun: "Hati biru, kayak laut cinta kita 🌊"},
+      {text: "Putih", correct: true, summary: "Kamu memiliki cinta yang tulus dan murni.", fun: "Putih itu tulus kayak cintaku yang nggak kenal batas 🤍"}
+    ],
+    characterImg: "assets/48.jpeg"
+  },
+
+  // Level 49: Tes Fokus - Kalimat Berbeda
+  {
+    title: "Level 49: Fokus Yuk!",
+    story: "👀 Windi menguji konsentrasi Adtar.",
+    question: "Mana kalimat yang berbeda dari yang lain?",
+    options: [
+      {text: "Aku suka kamu.", correct: false, summary: "Semua suka kamu...", fun: "Siapa sih yang nggak suka kamu? 😘"},
+      {text: "Aku cinta kamu.", correct: false, summary: "Mirip, tapi bukan yang beda.", fun: "Cinta dan suka, satu paket buat kamu 💝"},
+      {text: "Aku sayang kamu.", correct: false, summary: "Masih mirip juga nih.", fun: "Sayangku padamu tak berubah 💖"},
+      {text: "Aku takut kecoa.", correct: true, summary: "Nah ini dia yang beda banget! 😂", fun: "Aku takut kecoa, tapi nggak takut cinta sama kamu 😅❤️"}
+    ],
+    characterImg: "assets/49.jpeg"
+  },
+
+  // Level 50: Tes Emosi dari Ekspresi
+  {
+    title: "Level 50: Ekspresi Wajah",
+    story: "😮 Windi menunjukkan gambar wajah sedih. 'Menurutmu, ekspresi ini menggambarkan apa?'",
+    question: "Ekspresi di gambar ini menunjukkan perasaan?",
+    options: [
+      {text: "Sedih", correct: true, summary: "Benar! Itu wajah sedih.", fun: "Sedih karena jauh dari kamu tuh nggak enak 😢"},
+      {text: "Senang", correct: false, summary: "Bukan, coba lihat lagi matanya.", fun: "Kalau kamu senyum, baru aku senang! 😍"},
+      {text: "Marah", correct: false, summary: "Marah biasanya alis turun dan tatapan tajam.", fun: "Marah? Nggak mungkin deh ke kamu 😤❤️"},
+      {text: "Kaget", correct: false, summary: "Kaget beda dengan sedih ya.", fun: "Kaget pas kamu bilang cinta… eh beneran? 😳"}
+    ],
+    characterImg: "assets/50.jpeg"
+  }
+];
+
+
+
+
+let currentLevel = 0;
+let correctAnswers = 0;
+
+const levelTitle = document.getElementById("level-title");
+const storyText = document.getElementById("story-text");
+const questionText = document.getElementById("question-text");
+const optionsList = document.getElementById("options-list");
+const feedbackText = document.getElementById("feedback-text");
+const characterImg = document.getElementById("character-img");
+const nextBtn = document.getElementById("next-btn");
+
+// Skor tampil real-time di pojok kanan atas
+const scoreDisplay = document.createElement("div");
+scoreDisplay.id = "scoreDisplay";
+scoreDisplay.style.cssText = `
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  background: #fff4f4;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-weight: bold;
+  font-size: 16px;
+  z-index: 999;
+`;
+document.body.appendChild(scoreDisplay);
+
+function updateScoreDisplay() {
+  scoreDisplay.textContent = `Skor: ${correctAnswers} / ${levels.length}`;
+}
+
+function loadLevel(levelIndex) {
+  const lvl = levels[levelIndex];
+  levelTitle.textContent = lvl.title;
+  storyText.textContent = lvl.story;
+  questionText.textContent = lvl.question;
+  characterImg.src = lvl.characterImg || "default.png";
+  feedbackText.innerHTML = "";
+  nextBtn.style.display = "none";
+  optionsList.innerHTML = "";
+  lvl.options.forEach((opt, i) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.textContent = opt.text;
+    btn.className = "option-btn";
+    btn.onclick = () => checkAnswer(i);
+    li.appendChild(btn);
+    optionsList.appendChild(li);
+  });
+  updateScoreDisplay();
+}
+
+function checkAnswer(selectedIndex) {
+  const lvl = levels[currentLevel];
+  const selectedOption = lvl.options[selectedIndex];
+  if (selectedOption.correct) {
+    correctAnswers++;
+    feedbackText.innerHTML = `
+      <div style="color:green;">Benar! 🎉</div>
+      <div class="summary">${selectedOption.summary}</div>
+      <div class="fun-text">${selectedOption.fun}</div>
+    `;
+    nextBtn.style.display = "inline-block";
+    disableOptions();
+  } else {
+    feedbackText.innerHTML = `
+      <div style="color:red;">Salah! 😢</div>
+      <div class="summary">${selectedOption.summary}</div>
+      <div class="fun-text">${selectedOption.fun}</div>
+    `;
+    disableOption(selectedIndex);
+  }
+  updateScoreDisplay();
+}
+
+function disableOptions() {
+  const buttons = optionsList.querySelectorAll("button.option-btn");
+  buttons.forEach(btn => btn.disabled = true);
+}
+
+function disableOption(index) {
+  const btn = optionsList.querySelectorAll("button.option-btn")[index];
+  btn.disabled = true;
+  btn.style.backgroundColor = "#ef9a9a";
+}
+
+function nextLevel() {
+  currentLevel++;
+  if (currentLevel >= levels.length) {
+    const finalScore = (correctAnswers / levels.length) * 100;
+    const motivation = `
+      Skormu: ${finalScore}
+      
+      🌟 Jangan pernah merasa insecure!
+      Kamu telah belajar, menjawab, dan berjuang.
+      Ilmu itu bukan tentang sempurna, tapi tentang proses. Kamu luar biasa! ❤️
+
+      “Seperti cinta sejati, ilmu juga tumbuh dari kesabaran dan keberanian.”
+    `;
+    alert("Selamat! Kamu telah menyelesaikan semua level!\n\n" + motivation);
+    resetGame();
+    return;
+  }
+  loadLevel(currentLevel);
+}
+
+function resetGame() {
+  currentLevel = 0;
+  correctAnswers = 0;
+  updateScoreDisplay();
+  loadLevel(currentLevel);
+}
+
+nextBtn.addEventListener("click", nextLevel);
+
+// Inisialisasi awal
+updateScoreDisplay();
+loadLevel(currentLevel);
+</script>
+
+</body> </html> ```
+
